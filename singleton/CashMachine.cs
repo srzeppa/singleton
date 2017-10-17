@@ -53,5 +53,10 @@
             }
         }
 
+        public void Reset()
+        {
+            cashMachineInstance = null;
+        }
+
     }
 }

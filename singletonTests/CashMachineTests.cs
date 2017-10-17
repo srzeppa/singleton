@@ -14,6 +14,7 @@ namespace singletonTests
             var cashMachineInstance2 = CashMachine.Instance;
 
             Assert.AreEqual(cashMachineInstance1, cashMachineInstance2);
+            cashMachineInstance1.Reset();
         }
 
         [TestMethod]
@@ -25,8 +26,10 @@ namespace singletonTests
             cashMachineInstance1.SetMoney(100);
             cashMachineInstance2.GetMoney(50);
 
-            Assert.AreEqual(cashMachineInstance1.GetAccount(), 50);
-            Assert.AreEqual(cashMachineInstance2.GetAccount(), 50);
+            Assert.AreEqual(50, cashMachineInstance1.GetAccount());
+            Assert.AreEqual(50, cashMachineInstance2.GetAccount());
+
+            cashMachineInstance1.Reset();
         }
 
         [TestMethod]
@@ -41,11 +44,12 @@ namespace singletonTests
             thread1.Start();
             thread2.Start();
 
-            while (thread1.ThreadState != ThreadState.Stopped || thread2.ThreadState != ThreadState.Stopped)
+            while (thread1.ThreadState == ThreadState.Stopped && thread2.ThreadState == ThreadState.Stopped)
             {
-                Assert.AreEqual(cashMachineInstance1.GetAccount(), 50);
-                Assert.AreEqual(cashMachineInstance2.GetAccount(), 50);
+                Assert.AreEqual(50, cashMachineInstance1.GetAccount());
+                Assert.AreEqual(50, cashMachineInstance2.GetAccount());
             }
+            cashMachineInstance1.Reset();
         }
     }
 }
