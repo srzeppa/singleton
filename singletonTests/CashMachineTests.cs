@@ -34,14 +34,18 @@ namespace singletonTests
         {
             var cashMachineInstance1 = CashMachine.Instance;
             var thread1 = new Thread(obj => {cashMachineInstance1.SetMoney(100);});
-            thread1.Start();
 
             var cashMachineInstance2 = CashMachine.Instance;
             var thread2 = new Thread(obj => { cashMachineInstance2.GetMoney(50); });
+
+            thread1.Start();
             thread2.Start();
 
-            Assert.AreEqual(cashMachineInstance1.GetAccount(), 50);
-            Assert.AreEqual(cashMachineInstance2.GetAccount(), 50);
+            while (thread1.ThreadState != ThreadState.Stopped || thread2.ThreadState != ThreadState.Stopped)
+            {
+                Assert.AreEqual(cashMachineInstance1.GetAccount(), 50);
+                Assert.AreEqual(cashMachineInstance2.GetAccount(), 50);
+            }
         }
     }
 }

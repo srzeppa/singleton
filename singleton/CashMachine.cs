@@ -31,17 +31,26 @@
 
         public void SetMoney(int quantity)
         {
-            account += quantity;
+            lock (Padlock)
+            {
+                account += quantity;
+            }
         }
 
         public void GetMoney(int quantity)
         {
-            account -= quantity;
+            lock (Padlock)
+            {
+                account -= quantity;
+            }
         }
 
         public int GetAccount()
         {
-            return account;
+            lock (Padlock)
+            {
+                return account;
+            }
         }
 
     }
